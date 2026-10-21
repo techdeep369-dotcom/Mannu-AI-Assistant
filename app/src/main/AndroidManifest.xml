@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.aiassistant">
+    <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
 
     <!-- All Required Permissions from Advanced Prompt PDF & Android Roadmap -->
     <uses-permission android:name="android.permission.INTERNET" />
