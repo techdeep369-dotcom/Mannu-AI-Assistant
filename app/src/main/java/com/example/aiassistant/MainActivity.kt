@@ -84,6 +84,9 @@ enum class AIPersonality(val title: String, val defaultPitch: Float, val default
     BOYFRIEND("BF MODE", 0.80f, 1.0f)
 }
 
+// Defined AssistantState to resolve Unresolved Reference errors
+enum class AssistantState { IDLE, LISTENING, ROUTING, THINKING, REFLECTING, SPEAKING }
+
 data class ChatMessage(val sender: String, val text: String, val badge: String)
 data class PendingHumanApproval(val title: String, val description: String, val onConfirm: () -> Unit)
 
@@ -132,7 +135,7 @@ class OfflineActionExecutor(private val context: Context) {
                 cmd.contains("morning briefing") || cmd.contains("good morning") -> {
                     val bm = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
                     val level = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-                    "Good Morning! Phone battery $level% hai. Aapki Multi-Agent aur Social Automation team ready hai."
+                    "Good Morning! Phone battery $level% hai. Aapki Multi-Agent team ready hai."
                 }
                 cmd.contains("battery") || cmd.contains("charge") -> {
                     val bm = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
@@ -185,7 +188,7 @@ class AssistantViewModel : ViewModel() {
     private val _aiResponse = MutableStateFlow("SAY 'HEY MANNU' OR TAP THE ORB")
     val aiResponse: StateFlow<String> = _aiResponse
 
-    private val _agentTrace = MutableStateFlow("ROUTER READY • 16-DOC ARCHITECTURE ACTIVE")
+    private val _agentTrace = MutableStateFlow("ROUTER READY • ARCHITECTURE ACTIVE")
     val agentTrace: StateFlow<String> = _agentTrace
 
     private val _chatHistory = MutableStateFlow<List<ChatMessage>>(emptyList())
@@ -241,7 +244,7 @@ class AssistantViewModel : ViewModel() {
         if (count > 2) {
             val lastTwo = _chatHistory.value.takeLast(2)
             _chatHistory.value = listOf(
-                ChatMessage("SYSTEM (/compact)", "Compacted $count messages into summary.", "SAVER")
+                ChatMessage("SYSTEM (/compact)", "Compacted $count messages.", "SAVER")
             ) + lastTwo
             _agentTrace.value = "SESSION COMPACTED"
         }
@@ -273,7 +276,7 @@ class AssistantViewModel : ViewModel() {
     fun activatePro(context: Context) {
         _isPro.value = true
         _freeCredits.value = 99999
-        val msg = "PRO UNLOCKED • UNLIMITED AGENTS"
+        val msg = "PRO UNLOCKED"
         _aiResponse.value = msg
         savePersistence(context, msg)
     }
